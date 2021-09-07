@@ -1,0 +1,19 @@
+import sys
+inp=sys.stdin.readline
+n,m=map(int,inp().split())
+
+visit=[0 for _ in range(n+1)]
+arr=[]
+
+def nm(arr):
+    if len(arr)==m:
+        print(' '.join(map(str,arr)))
+        return        
+    for i in range(n):
+         if visit[i]==0:
+            visit[i]=1
+            arr.append(i+1)
+            nm(arr)
+            visit[i]=0
+            arr.pop()
+nm(arr)
