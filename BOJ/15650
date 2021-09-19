@@ -1,23 +1,19 @@
 import sys
 inp=sys.stdin.readline
 n,m=map(int,inp().split())
-visited=[False]*n
-out=[]
-fin=[]
 
-def solve(depth,n,m):
-    if depth==m:
-        if (set(out) not in fin):
-            fin.append(set(out))
-            print(' '.join(map(str,out)))
-            return
-        else:
-            return
-    for i in range(len(visited)):
-        if not visited[i]:
-            visited[i]=True
-            out.append(i+1)
-            solve(depth+1,n,m)
-            visited[i]=False
-            out.pop()
-solve(0,n,m)
+visit=[0 for _ in range(n+1)]
+arr=[]
+
+def nm(arr,l):
+    if len(arr)==m:
+        print(' '.join(map(str,arr)))
+        return        
+    for i in range(l,n):
+         if visit[i]==0:
+            visit[i]=1
+            arr.append(i+1)
+            nm(arr,i+1)
+            visit[i]=0
+            arr.pop()
+nm(arr,0)
