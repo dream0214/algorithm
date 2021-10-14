@@ -1,0 +1,41 @@
+import sys
+
+n=int(input())
+s=input()
+nums=[]
+opps=[]
+
+def calc(a,b,opp):
+    if opp=='+':
+        ans=a+b
+    elif opp=='*':
+        ans=a*b
+    elif opp=='-':
+        ans=a-b
+    return ans
+
+if n==1:
+    print(int(s))
+    sys.exit(0)
+
+for i in range(len(s)):
+    if i%2==0:
+        nums.append(int(s[i]))
+    else:
+        opps.append(s[i])
+
+dp=[-2147483648 for _ in range(len(nums))]
+mdp=[2147483648 for _ in range(len(nums))]
+dp[0]=nums[0]
+mdp[0]=nums[0]
+dp[1]=calc(nums[0],nums[1],opps[0])
+mdp[1]=calc(nums[0],nums[1],opps[0])
+for i in range(2,len(nums)):
+    mdp[i]=min(calc(mdp[i-1],nums[i],opps[i-1]),
+               calc(mdp[i-2],calc(nums[i-1],nums[i],opps[i-1]),opps[i-2]),
+               calc(dp[i-2],calc(nums[i-1],nums[i],opps[i-1]),opps[i-2]))
+    dp[i]=max(calc(dp[i-1],nums[i],opps[i-1]),
+              calc(dp[i-2],calc(nums[i-1],nums[i],opps[i-1]),opps[i-2]),
+              calc(mdp[i-2],calc(nums[i-1],nums[i],opps[i-1]),opps[i-2]))
+
+print(dp[len(nums)-1])
