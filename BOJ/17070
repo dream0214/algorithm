@@ -1,0 +1,43 @@
+import sys
+input=sys.stdin.readline
+n=int(input())
+
+house=[[-1]*(n+2) for _ in range(n+2)]
+global ans
+ans=0
+direction=0 #0은 가로, 1은 세로, 2는 대각선
+a=1
+b=2
+
+for i in range(n):
+    house[i+1]=[-1]+list(map(int,input().split()))+[-1]
+
+def solve(a,b,direction):
+    global ans
+    while(True):
+        if a==n and b==n:
+            ans+=1
+            return;
+        if direction==0:
+            if b<n and house[a][b+1] == 0:
+                solve(a,b+1,0)
+                if a<n and house[a+1][b]==0 and house[a+1][b+1]==0:
+                    solve(a+1,b+1,2)
+            return
+        if direction==1:
+            if a<n and house[a+1][b]==0:
+                solve(a+1,b,1)
+                if b<n and house[a][b+1]==0 and house[a+1][b+1]==0:
+                    solve(a+1,b+1,2)
+            return
+        if direction==2:
+            if b < n and house[a][ b + 1] == 0:
+                solve(a, b + 1, 0)
+                if a<n and house[a+1][b]==0 and house[a+1][b+1]==0:
+                    solve(a+1,b+1,2)
+            if a<n and house[a+1][b]==0:
+                solve(a+1,b,1)
+            return
+
+solve(a,b,direction)
+print(ans)
