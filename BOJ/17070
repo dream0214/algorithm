@@ -1,3 +1,5 @@
+#DFS
+
 import sys
 input=sys.stdin.readline
 n=int(input())
@@ -41,3 +43,40 @@ def solve(a,b,direction):
 
 solve(a,b,direction)
 print(ans)
+
+
+
+#DP
+import sys
+input=sys.stdin.readline
+n=int(input())
+
+house=[[-1]*(n+2) for _ in range(n+2)]
+global ans
+ans=0
+dp=[[[0 for _ in range(3)] for _ in range(n+1)] for _ in range(n+1)]
+
+for i in range(n):
+    house[i+1]=[-1]+list(map(int,input().split()))+[-1]
+for i in range(2,n+1):
+    if house[1][i]==1:
+        break
+    dp[1][i][0]=1
+
+for i in range(2,n+1):
+    for j in range(2,n+1):
+        if house[i][j]==1:
+            continue
+        dp[i][j][0]=dp[i][j-1][0]+dp[i][j-1][2]
+        dp[i][j][1]=dp[i-1][j][1]+dp[i-1][j][2]
+        dp[i][j][2]=dp[i-1][j-1][0]+dp[i-1][j-1][1]+dp[i-1][j-1][2]
+        if house[i-1][j]==1:
+            dp[i][j][1]=0
+            dp[i][j][2]=0
+        if house[i][j-1]==1:
+            dp[i][j][0]=0
+            dp[i][j][2]=0
+        if house[i-1][j-1]==1:
+            dp[i][j][2]=0
+
+print(sum(dp[n][n]))
