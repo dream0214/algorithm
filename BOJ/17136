@@ -1,0 +1,59 @@
+import sys
+paper=[]
+rest=[0,5,5,5,5,5]
+one=0
+global ans
+ans=25
+
+def check(i,j):
+    for k in range(1,6):
+        if i+k>=10 or j+k>=10:
+            return k
+        for l in range(k+1):
+            for m in range(k+1):
+                if l+m>=k:
+                    if paper[i+l][j+m]==0:
+                        return k
+    return 5
+
+def recursive(one,cnt):
+    global ans
+    if one==0:
+        ans=min(ans,cnt)
+        return
+    if cnt>=ans:
+        return
+    if sum(rest)==0:
+        return
+    for r in range(10):
+        for c in range(10):
+            if paper[r][c]==1:
+                k=check(r,c)
+                for l in range(k,0,-1):
+                    if rest[l]==0:
+                        continue
+                    rest[l]-=1
+                    for i in range(r,r+l):
+                        for j in range(c,c+l):
+                            paper[i][j]=0
+                    recursive(one-l*l,cnt+1)
+                    rest[l]+=1
+                    for i in range(r,r+l):
+                        for j in range(c,c+l):
+                            paper[i][j]=1
+                return
+    return
+
+for i in range(10):
+    paper.append(list(map(int,input().split())))
+    one+=sum(paper[i])
+
+if one==0:
+    print(0)
+else:
+    recursive(one,0)
+    if ans==25:
+        print('-1')
+    else:
+        print(ans)
+
