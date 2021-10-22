@@ -1,0 +1,71 @@
+n=int(input())
+place=[[0]*(n) for _ in range(n)]
+input_student=[]
+dict_student= {}
+
+for i in range(n**2):
+    input_student.append(list(map(int,input().split())))
+
+dx=[0,0,-1,1]
+dy=[-1,1,0,0]
+
+def cnt(frd_list,r,c):
+    adj_cnt=0
+    frd_cnt=0
+    for i in range(4):
+        ny=r+dy[i]
+        nx=c+dx[i]
+        if nx>=0 and nx<n and ny>=0 and ny<n:
+            if place[ny][nx]==0:
+                adj_cnt+=1
+            if frd_list:
+                if place[ny][nx] in frd_list:
+                    frd_cnt+=1
+    return adj_cnt,frd_cnt
+
+for s in input_student:
+    friend=[] # s가 좋아하는 친구 중에 이미 앉은 친구
+    for i in range(1,5):
+        if s[i] in dict_student:
+            friend.append(s[i])
+
+    if friend:
+        max_cnt=[]
+        for r in range(n):
+            for c in range(n):
+                if place[r][c]==0:
+                    adj_cnt,frd_cnt=cnt(friend,r,c)
+                    if not max_cnt:
+                        max_cnt=[frd_cnt,adj_cnt,r,c]
+                    elif frd_cnt>max_cnt[0]:
+                        max_cnt=[frd_cnt,adj_cnt,r,c]
+                    elif frd_cnt==max_cnt[0] and adj_cnt>max_cnt[1]:
+                        max_cnt=[frd_cnt,adj_cnt,r,c]
+        place[max_cnt[2]][max_cnt[3]]=s[0]
+        dict_student[s[0]]=s[1:]
+
+    else: #좋아하는 친구가 아직 자리에 없을 때
+        max_cnt=[]
+        for r in range(n):
+            for c in range(n):
+                if place[r][c]==0:
+                    adj_cnt,frd_cnt=cnt(friend,r,c)
+                    if not max_cnt:
+                        max_cnt=[adj_cnt,r,c]
+                    elif max_cnt[0]<adj_cnt:
+                        max_cnt=[adj_cnt,r,c]
+        place[max_cnt[1]][max_cnt[2]]=s[0]
+        dict_student[s[0]]=s[1:]
+
+#점수
+ans = 0
+for r in range(n):
+    for c in range(n):
+        friend=dict_student[place[r][c]]
+        adj_cnt,frd_cnt=cnt(friend,r,c)
+        if frd_cnt==1: ans+=1
+        elif frd_cnt==2: ans+=10
+        elif frd_cnt==3: ans+=100
+        elif frd_cnt==4: ans+=1000
+
+print(ans)
