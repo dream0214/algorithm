@@ -1,0 +1,53 @@
+# 시간초과 문제 해결
+# https://jeomn.tistory.com/17
+
+import sys
+input=sys.stdin.readline
+n,m=map(int,input().split())
+A=[]
+ans=0
+move=[]
+cloud=[[n-2,0],[n-1,0],[n-2,1],[n-1,1]]
+dy=[0,0,-1,-1,-1,0,1,1,1]
+dx=[0,-1,-1,0,1,1,1,0,-1]
+bugy=[-1,-1,1,1]
+bugx=[-1,1,-1,1]
+for i in range(n):
+    A.append(list(map(int,input().split())))
+for i in range(m):
+    move.append(list(map(int,input().split())))
+
+for i in range(m):
+    di=move[i][0]
+    si=move[i][1]
+    ny=dy[di]*si
+    nx=dx[di]*si
+    clouded=[[0]*n for _ in range(n)]
+
+    #이동
+    for j in cloud:
+        j[0]=(j[0]+ny+(n*25))%n
+        j[1]=(j[1]+nx+(n*25))%n
+        A[j[0]][j[1]]+=1
+        clouded[j[0]][j[1]]=1
+
+    #물복사버그
+    for j in cloud:
+        for l in range(4):
+            nby=j[0]+bugy[l]
+            nbx=j[1]+bugx[l]
+            if nby>=0 and nby<n and nbx>=0 and nbx<n:
+                if A[nby][nbx]>0:
+                    A[j[0]][j[1]]+=1
+
+    #구름 생성
+    cloud=[]
+    for r in range(n):
+        for c in range(n):
+            if A[r][c]>=2 and clouded[r][c]!=1:
+                cloud.append([r,c])
+                A[r][c]-=2
+
+for r in range(n):
+    ans+=sum(A[r])
+print(ans)
