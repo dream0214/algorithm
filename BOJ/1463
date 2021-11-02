@@ -1,0 +1,15 @@
+n=int(input())
+f=[0 for _ in range(n+3)]
+f[1]=0
+f[2]=1
+f[3]=1
+
+if n<=3: print(f[n])
+else:
+    for i in range(4,n+1):
+        case=[]
+        if i%3==0: case.append(f[int(i/3)])
+        if i%2==0: case.append(f[int(i/2)])
+        case.append(f[i-1])
+        f[i]=min(case)+1
+    print(f[n])
