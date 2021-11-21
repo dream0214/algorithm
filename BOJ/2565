@@ -1,15 +1,16 @@
-n = int(input())
-w = []
-w_b = []
-dp = [0 for i in range(n)]
+n=int(input())
+a=[]
+cnt=0
+dp=[1 for _ in range(n)]
+
 for i in range(n):
-    w.append(list(map(int, input().split())))
-w.sort(key = lambda x:x[0])
-for i in range(n):
-    w_b.append(w[i][1])
+    a.append(list(map(int,input().split())))
+a.sort()
+
+# 가장 긴 증가하는 수열
 for i in range(n):
     for j in range(i):
-        if w_b[i] > w_b[j] and dp[i] < dp[j]:
-            dp[i] = dp[j]
-    dp[i] += 1
-print(n - max(dp))
+        if a[i][1]>a[j][1]:
+            dp[i]=max(dp[i],dp[j]+1)
+
+print(n-max(dp))
