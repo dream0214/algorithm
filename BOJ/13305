@@ -1,0 +1,18 @@
+n=int(input())
+road=[]
+price=[]
+ans=0
+
+road=list(map(int,input().split()))
+price=list(map(int,input().split()))
+
+i=0
+while(i<n-1):
+    ans+=price[i]*road[i]
+    j=i+1
+    while(j<n-1 and price[i]<price[j]):
+        ans+=price[i]*road[j]
+        j+=1
+    i=j
+
+print(ans)
